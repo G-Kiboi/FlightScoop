@@ -1,7 +1,12 @@
-
+# Byte-compiled / cache files
 __pycache__/
 *.pyc
-credentials.json
+
+# Secrets / credentials
 .env
+config.py
+credentials.json
 
-
+# OS files
+.DS_Store
+Thumbs.db
