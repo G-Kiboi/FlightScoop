@@ -22,7 +22,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global last_chat_id
     last_chat_id = update.effective_chat.id
     msg = (
-        "🌍 *Welcome to SkyTips!*\n\n"
+        "🌍 *Welcome to Flight Scoop!*\n\n"
         "Find cheap flights in real-time.\n\n"
         "Use:\n"
         "`/cheap JFK DXB 2025-06-01`\n"
@@ -37,7 +37,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global last_chat_id
     last_chat_id = update.effective_chat.id
     msg = (
-        "🛫 *SkyTips Commands:*\n\n"
+        "🛫 *Flight Scoop Commands:*\n\n"
         "`/cheap ORIGIN DEST [DATE]` – Search cheap flights\n"
         "`/flight ORIGIN DEST [DATE]` – Alias for /cheap\n"
         "`/postdeal` – Show 10 hot flight routes\n"
@@ -63,10 +63,17 @@ async def cheap(update: Update, context: ContextTypes.DEFAULT_TYPE):
         logger.info(f"Searching flights: {origin} to {destination}, date={date}")
         result = get_flight_data(origin, destination, date)
 
+        # Adding inline button for flight booking
+        keyboard = [
+            [InlineKeyboardButton("Book Now", url=f"https://www.aviasales.com/search/{origin.lower()}{destination.lower()}1?marker=559862")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+
         await update.message.reply_text(
             result,
             parse_mode="Markdown",
-            disable_web_page_preview=False
+            disable_web_page_preview=False,
+            reply_markup=reply_markup
         )
 
     except Exception as e:
@@ -111,5 +118,5 @@ app.add_handler(CommandHandler("flight", cheap))  # Alias
 app.add_handler(CommandHandler("postdeal", postdeal))
 
 if __name__ == "__main__":
-    print("🚀 SkyTips bot running...")
+    print("🚀 Flight Scoop bot running...")
     app.run_polling()
